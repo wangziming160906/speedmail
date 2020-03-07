@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.speedmail.EmailSendSourceControlDao">
+
+    <resultMap id="emailsendsourcecontrolbean" type="com.speedmail.EmailSendSourceControlBean">
+        <result column="PLAN_DATE" property="plan_date" />
+        <result column="SEND_WAY" property="send_way" />
+        <result column="IS_OPEN" property="is_open" />
+        <result column="PLAN_SEND_COUNT" property="plan_send_count" />
+        <result column="FACT_SEND_COUNT" property="intfact_send_count" />
+        <result column="FACT_SEND_SUCC_COUNT" property="fact_send_succ_count" />
+        <result column="FACT_SEND_FAIL_COUNT" property="fact_send_fail_count" />
+        <result column="SLEEP_MINUTE_MIN" property="sleep_minute_min" />
+        <result column="SLEEP_MINUTE_MAX" property="sleep_minute_max" />
+        <result column="IS_OPEN_TEST" property="isopenTest" />
+    </resultMap>
+
+    <!--目的：为Dao接口方法提供SQL语句-->
+    <insert id="insertEmailSendSourceControl" >
+        INSERT INTO EMAILS_SEND_SOURCE_CONTROL(PLAN_DATE,IS_OPEN,PLAN_SEND_COUNT,SLEEP_MINUTE_MIN,SLEEP_MINUTE_MAX,IS_OPEN_TEST,SEND_WAY)
+        VALUES (#{emailSendSourceControlBean.plan_date},#{emailSendSourceControlBean.is_open},
+        #{emailSendSourceControlBean.plan_send_count},#{emailSendSourceControlBean.sleep_minute_min},
+        #{emailSendSourceControlBean.sleep_minute_max},#{emailSendSourceControlBean.isopenTest},#{emailSendSourceControlBean.send_way})
+    </insert>
+
+    <select id="getSendSourceControlList"  resultMap="emailsendsourcecontrolbean" >
+        SELECT * FROM EMAILS_SEND_SOURCE_CONTROL ORDER BY PLAN_DATE DESC
+    </select>
+
+    <update id="updateEmailSendSourceControl" parameterType="com.speedmail.EmailSendSourceControlBean">
+        UPDATE EMAILS_SEND_SOURCE_CONTROL
+          SET IS_OPEN = #{emailSendSourceControlBean.is_open},
+              IS_OPEN_TEST = #{emailSendSourceControlBean.isopenTest},
+              PLAN_SEND_COUNT = #{emailSendSourceControlBean.plan_send_count},
+              SLEEP_MINUTE_MIN = #{emailSendSourceControlBean.sleep_minute_min},
+              SLEEP_MINUTE_MAX = #{emailSendSourceControlBean.sleep_minute_max}
+        WHERE
+              PLAN_DATE = #{emailSendSourceControlBean.plan_date} AND SEND_WAY = #{emailSendSourceControlBean.send_way}
+    </update>
+
+    <delete id="deleteEmailSendSourceControl" parameterType="com.speedmail.EmailSendSourceControlBean">
+        DELETE
+          FROM EMAILS_SEND_SOURCE_CONTROL
+        WHERE
+          PLAN_DATE = #{emailSendSourceControlBean.plan_date} AND SEND_WAY = #{emailSendSourceControlBean.send_way}
+    </delete>
+</mapper>
